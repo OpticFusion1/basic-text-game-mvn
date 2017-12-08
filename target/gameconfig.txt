@@ -1,0 +1,22 @@
+8
+corridor-0
+corridor-1
+corridor-2
+corridor-3
+classroom-0
+classroom-1
+classroom-2
+classroom-3
+corridor-0 east corridor-3 south corridor-1 southeast classroom-0
+corridor-1 north corridor-0 northeast classroom-1 east corridor-2
+corridor-2 west corridor-1 northwest classroom-2 north corridor-3
+corridor-3 west corridor-0 southwest classroom-3 south corridor-2
+classroom-0 northwest corridor-0
+classroom-1 southwest corridor-1
+classroom-2 southeast corridor-2
+classroom-3 northeast corridor-3
+4
+knife-0 classroom-0
+sword-0 classroom-1
+shield-0 classroom-2
+hauberk-0 classroom-3

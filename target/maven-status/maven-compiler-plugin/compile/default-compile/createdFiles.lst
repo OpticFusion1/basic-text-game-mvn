@@ -1,0 +1,7 @@
+game\entities\Room.class
+game\entities\Item.class
+game\logic\Game$1.class
+game\logic\Game.class
+game\logic\Command.class
+game\entities\Player.class
+game\logic\CommandType.class
