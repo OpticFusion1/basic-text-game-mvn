@@ -1,0 +1,4 @@
+game\entities\ItemTest.class
+game\logic\CommandTest.class
+game\entities\PlayerTest.class
+game\entities\RoomTest.class
