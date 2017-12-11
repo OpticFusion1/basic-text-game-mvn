@@ -76,8 +76,6 @@ public class Game {
 
         } catch (IOException e) {
             System.out.println("Failed to initialized game: Error in configuration file.");
-        } catch (NumberFormatException e) {
-            System.out.println("Error processing expected integer value.");
         }
     }
 
