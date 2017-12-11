@@ -66,10 +66,6 @@ public class Game {
                 } else {
                     System.out.println("Please specify a positive integer value for the number of items.");
                 }
-
-
-                // printRooms();
-                // printItems();
             } else {
                 System.out.println("Please specify a positive integer value for the number of rooms.");
             }
@@ -141,8 +137,6 @@ public class Game {
         while(startRoomID == enemyStartRoomID)
             enemyStartRoomID= (int) (Math.random() * rooms.size());
         
-        // System.out.println("Player is in Room " + startRoomID);
-        // System.out.println("Enemy is in Room " + enemyStartRoomID);
         enemyRoom = rooms.get(enemyStartRoomID);
 
         System.out.print("What is your name? ");
@@ -197,11 +191,6 @@ public class Game {
                     System.out.println("You can't do that.");
                     break;
             }
-
-            // move enemy randomly
-            // System.out.println("Enemy is in " + enemyRoom.getRoomID());
-            
-            // System.out.println("Enemy moved to " + enemyRoom.getRoomID());
 
             if(currentRoom == enemyRoom) {
                 System.out.println("You enter a room to find a monster.");
