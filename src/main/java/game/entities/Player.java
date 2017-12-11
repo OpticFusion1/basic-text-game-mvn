@@ -3,15 +3,15 @@ package game.entities;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Player {
+public class Player implements ItemCarrier {
     private String name;
-    private List<Item> inventory;
+    private List<Item> items;
 
     public Player() {}
 
     public Player(String name) {
         this.name = name;
-        inventory = new LinkedList<Item>();
+        items = new LinkedList<Item>();
     }
 
     /**
@@ -24,8 +24,8 @@ public class Player {
     /**
      * @return the inventory
      */
-    public List<Item> getInventory() {
-        return inventory;
+    public List<Item> getItems() {
+        return items;
     }
 
     /**
@@ -35,27 +35,27 @@ public class Player {
         this.name = name;
     }
 
-    public void addItemToInventory(Item item) {
-        inventory.add(item);
+    public void addItem(Item item) {
+        items.add(item);
     }
 
-    public Item getItemFromInventory(String itemName) {
-        for(Item item : inventory)
+    public Item getItem(String itemName) {
+        for(Item item : items)
             if(item.getItemName().equalsIgnoreCase(itemName)) return item;
 
         return null;
     }
 
-    public boolean hasItem(String itemName) {
-        for(Item item : inventory)
-            if(item.getItemName().equalsIgnoreCase(itemName)) return true;
+    public boolean hasItem(String itemType) {
+        for(Item item : items)
+            if(item.getItemType().equalsIgnoreCase(itemType)) return true;
         return false;
     }
 
-    public Item removeItemFromInventory(String itemName) {
-        for(Item item : inventory)
+    public Item removeItem(String itemName) {
+        for(Item item : items)
             if(item.getItemName().equalsIgnoreCase(itemName)) {
-                inventory.remove(item);
+                items.remove(item);
                 return item;
             }
         return null;

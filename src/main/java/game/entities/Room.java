@@ -4,14 +4,14 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Room {
+public class Room implements ItemCarrier {
     private int roomID;
     private String roomStringID;
     private String roomType;
     private List<Item> items;
     private HashMap<String, Room> exits;
 
-    public Room() {}
+    public Room()  {}
 
     public Room(int roomID) {
         this.roomID = roomID;
@@ -65,6 +65,18 @@ public class Room {
      */
     public List<Item> getItems() {
         return items;
+    }
+
+    public Item getItem(String itemName) {
+        for(Item item : items)
+            if(item.getItemName().equalsIgnoreCase(itemName)) return item;
+        return null;
+    }
+
+    public boolean hasItem(String itemName) {
+        for(Item item : items)
+            if(item.getItemName().equalsIgnoreCase(itemName)) return true;
+        return false;
     }
 
     public void addItem(Item item) {

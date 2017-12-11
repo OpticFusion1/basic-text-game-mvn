@@ -7,6 +7,7 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
+import java.util.Set;
 
 import game.entities.Item;
 import game.entities.Player;
@@ -17,6 +18,7 @@ public class Game {
     private List<Room> rooms;
     private List<Item> items;
     private Room currentRoom;
+    private Room enemyRoom;
 
     public Game(String configurationFile) {
         initializeRooms(configurationFile);
@@ -99,7 +101,7 @@ public class Game {
     }
 
     private void printItems(Player player) {
-        for(Item i : player.getInventory())
+        for(Item i : player.getItems())
             System.out.println("  " + i.getItemType());
     }
 
@@ -123,13 +125,14 @@ public class Game {
     }
     
     private Item findItemByItemType(Player player, String itemType) {
-        for(Item item : player.getInventory())
+        for(Item item : player.getItems())
             if(item.getItemType().equalsIgnoreCase(itemType)) return item;
         return null;
     }
 
     public void play() {
-        int startRoomID = (int) Math.random() * rooms.size();
+        int startRoomID = (int) (Math.random() * rooms.size());
+        int enemyStartRoomID = (int) (Math.random() * rooms.size());
         String playerName;
         Scanner sc = new Scanner(System.in);
         boolean finished = false;
@@ -137,11 +140,21 @@ public class Game {
 
         currentRoom = rooms.get(startRoomID);
 
+        while(startRoomID == enemyStartRoomID)
+            enemyStartRoomID= (int) (Math.random() * rooms.size());
+        
+        // System.out.println("Player is in Room " + startRoomID);
+        // System.out.println("Enemy is in Room " + enemyStartRoomID);
+        enemyRoom = rooms.get(enemyStartRoomID);
+
         System.out.print("What is your name? ");
         playerName = sc.nextLine();
         player = new Player(playerName);
 
-        System.out.println("Welcome, " + player.getName() + "!");
+        System.out.println("Welcome to the Dungeon, " + player.getName() + "...");
+        System.out.println("In this place is a monster that can kill you if you are unable to arm yourself.");
+        System.out.println("Find yourself a weapon and a shield or armor of some kind.");
+        System.out.println("But be careful, as while you are moving around, IT is too...");
 
         do {
             Command currentCommand;
@@ -161,6 +174,7 @@ public class Game {
                 case GOTO:
                     String direction = currentCommand.getCommandArguments()[0];
                     if(!move(direction)) System.out.println("There's nowhere to go there.");
+                    else moveEnemy();
                     break;
                 case PICKUP:
                     if(!pickupItem(currentCommand.getCommandArguments()[0])) System.out.println("There is no " + currentCommand.getCommandArguments()[0] + "here.");
@@ -169,7 +183,7 @@ public class Game {
                     if(!putdownItem(currentCommand.getCommandArguments()[0])) System.out.println("You don't have a/an " + currentCommand.getCommandArguments()[0] + ".");
                     break;
                 case INVENTORY:
-                    if(player.getInventory().size() > 0) {
+                    if(player.getItems().size() > 0) {
                         System.out.println("You are carrying:");
                         printItems(player);
                     } else System.out.println("You are not carrying anything.");
@@ -185,6 +199,26 @@ public class Game {
                     System.out.println("You can't do that.");
                     break;
             }
+
+            // move enemy randomly
+            // System.out.println("Enemy is in " + enemyRoom.getRoomID());
+            
+            // System.out.println("Enemy moved to " + enemyRoom.getRoomID());
+
+            if(currentRoom == enemyRoom) {
+                System.out.println("You enter a room to find a monster.");
+                if((player.hasItem("knife") || player.hasItem("sword")) && (player.hasItem("shield") || player.hasItem("hauberk"))) {
+                    System.out.println("Fortunately, you gathered enough equipment to stand your ground.");
+                    System.out.println("You are victorious.");
+                } else {
+                    System.out.println("You scrabble around desperately for something --- anything --- to defend yourself.");
+                    System.out.println("You come up with nothing.");
+                    System.out.println("Your mouth opens in a silent scream as he charges toward you.");
+                    System.out.println("You died.");
+                }
+                finished = true;
+            }
+            
         } while(!finished);
 
         sc.close();
@@ -193,7 +227,7 @@ public class Game {
     private boolean putdownItem(String itemType) {
         Item tempItem = findItemByItemType(player, itemType);
         if(tempItem != null) {
-            player.removeItemFromInventory(tempItem.getItemName());
+            player.removeItem(tempItem.getItemName());
             currentRoom.addItem(tempItem);
             tempItem.setLocation(currentRoom);
             return true;
@@ -204,7 +238,7 @@ public class Game {
     private boolean pickupItem(String itemType) {
         Item tempItem = findItemByItemType(currentRoom, itemType);
         if(tempItem != null) {
-            player.addItemToInventory(tempItem);
+            player.addItem(tempItem);
             tempItem.setLocation(null);
             currentRoom.removeItem(tempItem.getItemName());
             return true;
@@ -217,6 +251,16 @@ public class Game {
             currentRoom = currentRoom.getExits().get(destination);
             return true;
         } else return false;
+    }
+
+    private void moveEnemy() {
+        Set<String> exits = enemyRoom.getExits().keySet();
+        int randomExit = (int) (Math.random() * exits.size());
+        int i = 0;
+        for(String exit : exits) {
+            if(i == randomExit) enemyRoom = enemyRoom.getExits().get(exit);
+            i++;
+        }
     }
 
     public static void main(String[] args) {
